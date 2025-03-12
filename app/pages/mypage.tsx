@@ -1,54 +1,79 @@
-import React, { useState } from 'react';
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-
-export function Mypage() {
-    const [pdfUrl, setPdfUrl] = useState(null);
-    const [isOpen, setIsOpen] = useState(false);
-
-    async function createPdf() {
-        const pdfDoc = await PDFDocument.create();
-        const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
-
-        const page = pdfDoc.addPage();
-        const { width, height } = page.getSize();
-        const fontSize = 30;
-
-        page.drawText('Creating PDFs in JavaScript is awesome!', {
-            x: 50,
-            y: height - 4 * fontSize,
-            size: fontSize,
-            font: timesRomanFont,
-            color: rgb(0, 0.53, 0.71),
-        });
-
-        const pdfBytes = await pdfDoc.save();
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-
-        setPdfUrl(url);
-        setIsOpen(true);
-    }
-
-    return (
-        <div className="p-10 flex flex-col items-center">
-            <button 
-                onClick={createPdf} 
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
-                Generate PDF
-            </button>
-
-            {isOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white rounded-lg p-6 shadow-lg w-3/4 h-3/4">
-                        <button 
-                            onClick={() => setIsOpen(false)}
-                            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
-                            ✖
+  // Toolbar plugin
+   const renderToolbar = (
+        <div className="pdf-toolbar" style={{
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: '#fff',
+            borderBottom: '1px solid #e0e0e0',
+            padding: '4px 8px',
+            width: '100%',
+            justifyContent: 'space-between'
+        }}>
+            {/* Left section */}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                {/* Back button */}
+                <MinimalButton>
+                    <SimpleIcon letter="←" title="Back" />
+                </MinimalButton>
+                
+                {/* Search button */}
+                
+            </div>
+            
+            {/* Center - Title */}
+            <div style={{ 
+                flexGrow: 1, 
+                textAlign: 'center', 
+                fontWeight: 'bold',
+                fontSize: '14px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                padding: '0 16px',
+                color: 'black'
+            }}>
+                {fileName}
+            </div>
+            
+            {/* Right section */}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                {/* Comment/note button */}
+                <MinimalButton>
+                    <SimpleIcon letter="C" title="Comment" />
+                </MinimalButton>
+                
+                {/* Thumbnail/outline view button */}
+                <MinimalButton>
+                    <SimpleIcon letter="T" title="Thumbnails" />
+                </MinimalButton>
+                
+                {/* Text size/zoom controls */}
+                <ZoomOut>
+                    {(props: RenderZoomOutProps) => (
+                        <button
+                            style={{
+                                backgroundColor: '#357edd',
+                                border: 'none',
+                                borderRadius: '4px',
+                                color: '#ffffff',
+                                cursor: 'pointer',
+                                padding: '8px',
+                            }}
+                            onClick={props.onClick}
+                        >
+                            Zoom out
                         </button>
-                        <iframe src={pdfUrl} className="w-full h-full border-none"></iframe>
-                    </div>
-                </div>
-            )}
+                    )}
+                </ZoomOut>;
+                <MinimalButton onClick={() => setScale(scale => scale + 0.1)}>
+                    <SimpleIcon letter="+" title="Zoom In" />
+                </MinimalButton>
+                
+                {/* Fullscreen button */}
+                <MinimalButton onClick={fullScreenPluginInstance.toggleFullScreen}>
+                    <SimpleIcon letter="F" title="Fullscreen" />
+                </MinimalButton>
+            </div>
         </div>
     );
-}
+    
