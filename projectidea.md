@@ -1,0 +1,2 @@
+BookIo project aims to inhance the the daily use of reading materials by providing a centralized and easy to use library which is found everywhere you want to find it.
+    With the main goal being local use enhancement
