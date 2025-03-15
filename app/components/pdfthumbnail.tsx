@@ -1,0 +1,54 @@
+import React, { useEffect, useState } from 'react';
+
+function PdfThumbnail({ pdfUrl }) {
+    const [thumbnail, setThumbnail] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        import('pdfjs-dist').then(pdfjsLib => {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
+            async function renderFirstPage() {
+                try {
+                    setLoading(true);
+                    const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+                    const page = await pdf.getPage(1);
+                    const scale = 2;
+                    const viewport = page.getViewport({ scale });
+
+                    const canvas = document.createElement("canvas");
+                    const context = canvas.getContext("2d");
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+
+                    await page.render({ canvasContext: context, viewport }).promise;
+                    setThumbnail(canvas.toDataURL());
+                    setLoading(false);
+                } catch (err) {
+                    setError("Error loading PDF: " + err.message);
+                    setLoading(false);
+                }
+            }
+
+            renderFirstPage();
+        }).catch((err) => {
+            setError("Error loading pdf.js: " + err.message);
+            setLoading(false);
+        });
+
+        return () => {
+            setThumbnail("");
+            setLoading(true);
+            setError(null);
+        };
+    }, [pdfUrl]);
+
+    if (error) {
+        return <p>Error: {error}</p>;
+    }
+
+    return loading ? <p>Loading....</p> : <img src={thumbnail} alt="pdf preview" className='w-[200px] h-[250px] border border-gray-200 rounded-md'/>;
+}
+
+export default PdfThumbnail;

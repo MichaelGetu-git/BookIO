@@ -1,8 +1,8 @@
 import type { Route } from "./+types/home";
 import { Welcome } from "../welcome/welcome";
 import { Worker } from "@react-pdf-viewer/core"
-import BookReader from "~/pages/bookreader";
-
+import  BookReader  from "./bookreader";
+import Homepage from "./_index";
 // Specify the worker's location
 
 export function meta({}: Route.MetaArgs) {
@@ -22,7 +22,7 @@ export default function Home() {
   return  (
 
       <div>
-        <BookReader />
+        < Homepage/>
       </div>
 
   );
