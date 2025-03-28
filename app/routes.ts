@@ -8,5 +8,6 @@ export default [
         route("/upload","routes/bookStore.tsx")
     ]),
     route("/login", "routes/login.tsx"),
+    route("/signup", "routes/signup.tsx")
 
 ] satisfies RouteConfig;

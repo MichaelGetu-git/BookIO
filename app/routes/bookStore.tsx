@@ -22,7 +22,7 @@ const BookUpload = () => {
         data: { user }, 
       } = await supabase.auth.getUser();
     if (user) setUserId(user.id);
-
+    console.log(user.id)
     const {data: categoriesData, error} = await supabase
       .from("categories")
       .select("*");
@@ -32,7 +32,7 @@ const BookUpload = () => {
   fetchUser();
 }, []);
   
-  console.log(userId)
+  
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   }
