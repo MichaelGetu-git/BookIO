@@ -1,5 +1,6 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import PdfThumbnail from '~/components/pdfthumbnail';
+import Login from './login';
 
 const Homepage = memo(() => {
     const pdfUrls = [
@@ -8,6 +9,8 @@ const Homepage = memo(() => {
         "/CGAssignment.pdf",
         
     ]
+
+    useEffect
     return (
         <div className='bg-[#F4F0F0]'>
             <div className='grid grid-cols-12'>
