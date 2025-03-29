@@ -22,18 +22,20 @@ import '@react-pdf-viewer/full-screen/lib/styles/index.css';
 import '@react-pdf-viewer/highlight/lib/styles/index.css';
 import '@react-pdf-viewer/search/lib/styles/index.css';
 import CustomToolbar from '~/components/customToolbar';
+import { useLocation, useParams } from 'react-router';
 
 const BookReader = () => {
     const [fileName, setFileName] = React.useState('IML NOTES - Michael Getu.PDF');
     const [scale, setScale] = React.useState<number>(1);
-    
+    const { pdfUrl } = useParams();
+    const decodedPdfUrl = decodeURIComponent(pdfUrl || '')
     // Create plugins
     const searchPluginInstance = searchPlugin();
     const {Search}  = searchPluginInstance;
     const fullScreenPluginInstance = fullScreenPlugin();
     const toolbarPluginInstance = toolbarPlugin();
 
-    
+    console.log(pdfUrl)
     // Create a state to store highlights/notes
     const [notes, setNotes] = React.useState<Array<any>>([]);
 
@@ -217,7 +219,7 @@ const renderToolbar = (
             <div style={{ flex: 1, overflow: 'hidden' }}>
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
                     <Viewer
-                        fileUrl="/CGAssignment.pdf"
+                        fileUrl={decodedPdfUrl}
                         plugins={[
                             toolbarPluginInstance,
                             fullScreenPluginInstance,

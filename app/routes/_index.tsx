@@ -1,16 +1,56 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PdfThumbnail from '~/components/pdfthumbnail';
 import Login from './login';
+import { supabase } from './supabaseClient';
+import CreatecatBook from '~/components/createcatBook';
 
 const Homepage = memo(() => {
-    const pdfUrls = [
-        "/CGAssignment.pdf",
-        "/CGAssignment.pdf",
-        "/CGAssignment.pdf",
-        
-    ]
+    const [books, setBooks] = useState<any[]>([])
+    const [userId, setUserId]  = useState<string | null>(null)
+    const [isOpen, setIsOpen] = useState(false);
+    const [activeButton, setActiveButton] = useState(null)
+    
+    const handleButtonClick=(index) => {
 
-    useEffect
+        setActiveButton(index == activeButton ? null : index);
+    }
+
+    useEffect(() => {
+        async function fetchBooksAndUser() {
+            try {
+                // Fetch user
+                const { data: userData, error: userError } = await supabase.auth.getUser();
+                if (userError) {
+                    console.error("Error fetching user: ", userError);
+                    return;
+                }
+    
+                if (userData?.user) {
+                    setUserId(userData.user.id);
+                } else {
+                    console.error("No user found.");
+                    return;
+                }
+    
+                // Fetch books after user is set
+                const { data: booksData, error: booksError } = await supabase
+                    .from("books")
+                    .select("*");
+    
+                if (booksError) {
+                    console.error("Error fetching books:", booksError);
+                } else {
+                    setBooks(booksData || []); // Ensure booksData is not null
+                }
+            } catch (err) {
+                console.error("Unexpected error:", err);
+            }
+        }
+    
+        fetchBooksAndUser();
+    }, []);
+    
+    console.log(books);
     return (
         <div className='bg-[#F4F0F0]'>
             <div className='grid grid-cols-12'>
@@ -36,20 +76,37 @@ const Homepage = memo(() => {
                         <PdfThumbnail pdfUrl="/CGAssignment.pdf" />
                        <div className='flex justify-center p-25'>
                             
-                            <p>CG Assignment</p>
+                            <div>
+                                <p>CG Assignment</p>
+                            </div>
                         </div>
                     </div>
-                    <div className='flex justify-around border border-white w-full h-15'>
-                        <p>add shelf</p>
-                        <p>all</p>
-                        <p>favorites</p>
-                        <p>plan to read</p>
-                        <p>completed</p>
+                    <div className='flex justify-between border border-white w-full h-15 px-15 pt-5'>
+                        <button 
+                            className='flex '
+                            onClick={()=> setIsOpen(true)}>
+                            <img src="/images/plus.png" alt="" className='w-7 h-7'/>
+                            <p className='text-large font-bold px-3 pb-3'>Add shelf</p>
+                        </button>
+                        {isOpen && <CreatecatBook onClose = {()=> setIsOpen(false) }/>}
+                        <div className='space-x-4 pr-25'>
+                            {
+                                ["All","Favorites","Plan to Read","Completed"].map((btnText, index)=> (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleButtonClick(index)}
+                                        className={` ${activeButton == index ? "pb-2 border-b-6 border-blue-700 overflow-hidden rounded-tl-lg rounded-tr-lg" :""}`}
+                                    >
+                                        {btnText}
+                                    </button>
+                                ))
+                            }
+                        </div>
                     </div>
-                    <div className='flex border border-white rounded-lg w-full bg-white p-10 gap-8'>
-                        {pdfUrls.map((pdfUrl,index)=> (
-                            <div key={index}>
-                                <PdfThumbnail  pdfUrl={pdfUrl} />
+                    <div className='flex border border-white rounded-lg w-full text-black bg-white p-10 gap-8'>
+                        {books.map((book)=> (
+                            <div key={book.id}>
+                                <PdfThumbnail pdfUrl={book.file_url}/>
                             </div>
                         ))}
                       

@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 function PdfThumbnail({ pdfUrl }) {
     const [thumbnail, setThumbnail] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const navigate = useNavigate();
+    
+    
+    const handleClick = () => {
+        navigate(`/bookreader/${encodeURIComponent(pdfUrl)}`)
+    }
     useEffect(() => {
         import('pdfjs-dist').then(pdfjsLib => {
             pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -48,7 +54,12 @@ function PdfThumbnail({ pdfUrl }) {
         return <p>Error: {error}</p>;
     }
 
-    return loading ? <p>Loading....</p> : <img src={thumbnail} alt="pdf preview" className='w-[200px] h-[250px] border border-gray-200 rounded-md'/>;
+    return loading ? <p>Loading....</p> 
+            : 
+        <button onClick={handleClick}>
+            <img src={thumbnail} alt="pdf preview" className='w-[200px] h-[250px] border border-gray-200 rounded-md'/>
+        </button>
+            ;
 }
 
 export default PdfThumbnail;
