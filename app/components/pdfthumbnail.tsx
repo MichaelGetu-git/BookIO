@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-function PdfThumbnail({ pdfUrl }) {
+function PdfThumbnail({ pdfUrl, bookName }) {
     const [thumbnail, setThumbnail] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,13 +17,6 @@ function PdfThumbnail({ pdfUrl }) {
 
             async function renderFirstPage() {
 
-                if (pdfUrl == "" || null) {
-                    return (
-                        <button >
-                            <img src={""} alt="pdf preview" className='w-[200px] h-[250px] border border-gray-200 rounded-md'/>
-                        </button>
-                    )
-                }
                 try {
                     setLoading(true);
                     const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
@@ -41,7 +34,6 @@ function PdfThumbnail({ pdfUrl }) {
                     setLoading(false);
                 } catch (err) {
                     setError("Error loading PDF: " + err.message);
-                    setLoading(false);
                 }
             }
 
@@ -51,6 +43,7 @@ function PdfThumbnail({ pdfUrl }) {
             setLoading(false);
         });
 
+
         return () => {
             setThumbnail("");
             setLoading(true);
@@ -58,16 +51,22 @@ function PdfThumbnail({ pdfUrl }) {
         };
     }, [pdfUrl]);
 
+    if (!pdfUrl) return null;
     if (error) {
         return <p>Error: {error}</p>;
     }
+    const bookTitle = (bookName || "").replace(/\.[^/.]+$/,"")
 
     return loading ? <p>Loading....</p> 
             : 
-        <button onClick={handleClick}>
-            <img src={thumbnail} alt="pdf preview" className='w-[200px] h-[250px] border border-gray-200 rounded-md'/>
-        </button>
-            ;
+        <div>
+                <button onClick={handleClick}
+                className='p-2'
+            >
+                <img src={thumbnail} alt="pdf preview" className='w-[200px] h-[250px] border border-gray-200 rounded-md'/>
+                <h4 className='font-bold p-2 text-sm'>{bookTitle}</h4>
+            </button>
+        </div>
 }
 
 export default PdfThumbnail;

@@ -3,6 +3,7 @@ import PdfThumbnail from '~/components/pdfthumbnail';
 import Login from './login';
 import { supabase } from './supabaseClient';
 import CreatecatBook from '~/components/createcatBook';
+import CatagDropdown from '~/components/catagDropdown';
 
 const Homepage = memo(() => {
     const [books, setBooks] = useState<any[]>([])
@@ -61,13 +62,10 @@ const Homepage = memo(() => {
         fetchBooksAndUser();
     }, []);
 
-    const findbookCat = (url, bookCat, actCat)=> {
-        if (bookCat == actCat) {
-            return url
-        } else {
-            return ""
-        }
-    }   
+    
+    const handleCatagShow = (event) => {
+        event.preventDefault()
+    }
     
     console.log(books);
     return (
@@ -126,27 +124,15 @@ const Homepage = memo(() => {
                         <div>
                             <h1 className='font-bold'>All Books</h1>
                         </div>
-                        <div>
-                            
+                        <div className='flex overflow-x-scroll space-x-8 p-3'> 
                             {books.map((book)=> (
                                 <div key={book.id}>
-                                    <PdfThumbnail pdfUrl={book.file_url}/>
+                                    <PdfThumbnail pdfUrl={book.file_url} bookName = {book.title}/>
                                 </div>
                             ))}
                         
                         </div>
-                        { categories.map((catag)=> (
-                            <div key={catag.id}>
-                                <h1 className='font-bold'>{catag.name}</h1>
-                                {books.map((book)=> (
-                                    <div key={book.id}>
-                                        <PdfThumbnail pdfUrl={findbookCat(book.file_url,book.category_id,catag.id)}/>
-                                    </div>
-                                ))}
-                            </div>
-                        ))
-
-                        }
+                        <CatagDropdown categories= {categories} books = {books}/>
                     </div>
                     
                 </div>

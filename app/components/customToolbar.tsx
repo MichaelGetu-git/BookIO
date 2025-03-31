@@ -7,16 +7,17 @@ import { toolbarPlugin, type ToolbarSlot } from '@react-pdf-viewer/toolbar';
 interface CustomToolbarProps {
     toolbarPluginInstance: ReturnType<typeof toolbarPlugin>;
     fullScreenPluginInstance: ReturnType<typeof fullScreenPlugin>;
+    fileName: string;
 }
 
-const CustomToolbar: React.FC<CustomToolbarProps> = ({ toolbarPluginInstance, fullScreenPluginInstance }) => {
+const CustomToolbar: React.FC<CustomToolbarProps> = ({ toolbarPluginInstance, fullScreenPluginInstance, fileName }) => {
     const { Toolbar } = toolbarPluginInstance;
 
     return (
         <div
             style={{
                 alignItems: 'center',
-                backgroundColor: '#eeeeee',
+                backgroundColor: 'white',
                 borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
                 display: 'flex',
                 padding: '4px',
@@ -68,6 +69,9 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({ toolbarPluginInstance, fu
                                         </button>
                                     )}
                                 </ZoomIn>
+                            </div>
+                            <div style={{flexGrow: 1, textAlign: 'center'}}>
+                                {fileName}
                             </div>
                             <div style={{ padding: '0px 2px', marginLeft: 'auto' }}>
                                 <GoToPreviousPage>

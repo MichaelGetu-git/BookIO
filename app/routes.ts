@@ -9,5 +9,6 @@ export default [
     route("/login", "routes/login.tsx"),
     route("/signup", "routes/signup.tsx"),
     route("/bookreader/:pdfUrl","routes/bookreader.tsx"),
+    route("/createbook", "routes/createbook.tsx"),
 
 ] satisfies RouteConfig;
