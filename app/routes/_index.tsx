@@ -6,6 +6,7 @@ import CreatecatBook from '~/components/createcatBook';
 
 const Homepage = memo(() => {
     const [books, setBooks] = useState<any[]>([])
+    const [categories, setCategories] = useState<any[]>([])
     const [userId, setUserId]  = useState<string | null>(null)
     const [isOpen, setIsOpen] = useState(false);
     const [activeButton, setActiveButton] = useState(null)
@@ -42,6 +43,16 @@ const Homepage = memo(() => {
                 } else {
                     setBooks(booksData || []); // Ensure booksData is not null
                 }
+
+                const {data: catagData, error: catagError} = await supabase
+                    .from("categories")
+                    .select("*");
+                
+                if (catagError) {
+                    console.error("Error fetching categories:", catagError);
+                } else {
+                    setCategories(catagData || []);
+                }
             } catch (err) {
                 console.error("Unexpected error:", err);
             }
@@ -49,6 +60,14 @@ const Homepage = memo(() => {
     
         fetchBooksAndUser();
     }, []);
+
+    const findbookCat = (url, bookCat, actCat)=> {
+        if (bookCat == actCat) {
+            return url
+        } else {
+            return ""
+        }
+    }   
     
     console.log(books);
     return (
@@ -103,14 +122,33 @@ const Homepage = memo(() => {
                             }
                         </div>
                     </div>
-                    <div className='flex border border-white rounded-lg w-full text-black bg-white p-10 gap-8'>
-                        {books.map((book)=> (
-                            <div key={book.id}>
-                                <PdfThumbnail pdfUrl={book.file_url}/>
+                    <div  className='flex flex-col border border-white rounded-lg w-full text-black bg-white p-10 gap-8'>
+                        <div>
+                            <h1 className='font-bold'>All Books</h1>
+                        </div>
+                        <div>
+                            
+                            {books.map((book)=> (
+                                <div key={book.id}>
+                                    <PdfThumbnail pdfUrl={book.file_url}/>
+                                </div>
+                            ))}
+                        
+                        </div>
+                        { categories.map((catag)=> (
+                            <div key={catag.id}>
+                                <h1 className='font-bold'>{catag.name}</h1>
+                                {books.map((book)=> (
+                                    <div key={book.id}>
+                                        <PdfThumbnail pdfUrl={findbookCat(book.file_url,book.category_id,catag.id)}/>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                      
+                        ))
+
+                        }
                     </div>
+                    
                 </div>
             </div>
         </div>

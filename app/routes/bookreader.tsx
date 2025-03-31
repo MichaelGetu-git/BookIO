@@ -42,11 +42,12 @@ const BookReader = () => {
     // Simple icon component
     const SimpleIcon = ({ letter, title }) => (
         <div style={{ 
-            width: '24px', 
+            width: '44px', 
             height: '24px', 
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
+            background: 'black',
             fontWeight: 'bold'
         }} title={title}>
             {letter}

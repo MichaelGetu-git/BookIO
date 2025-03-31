@@ -41,17 +41,11 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({ toolbarPluginInstance, fu
                                 <ZoomOut>
                                     {(props: RenderZoomOutProps) => (
                                         <button
-                                            style={{
-                                                backgroundColor: '#357edd',
-                                                border: 'none',
-                                                borderRadius: '4px',
-                                                color: '#ffffff',
-                                                cursor: 'pointer',
-                                                padding: '8px',
-                                            }}
+                                            
+                                            className='font-normal text-4xl px-3'
                                             onClick={props.onClick}
                                         >
-                                            Zoom Out
+                                            <img src="/images/zoom.png" alt=""  className='w-7 h-7' />
                                         </button>
                                     )}
                                 </ZoomOut>
@@ -67,17 +61,10 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({ toolbarPluginInstance, fu
                                 <ZoomIn>
                                     {(props: RenderZoomInProps) => (
                                         <button
-                                            style={{
-                                                backgroundColor: '#357edd',
-                                                border: 'none',
-                                                borderRadius: '4px',
-                                                color: '#ffffff',
-                                                cursor: 'pointer',
-                                                padding: '8px',
-                                            }}
+                                            className='font-normal text-4xl px-3'
                                             onClick={props.onClick}
                                         >
-                                            Zoom In
+                                            <img src="/images/zoom-in.png" alt=""  className='w-7 h-7' />
                                         </button>
                                     )}
                                 </ZoomIn>
@@ -86,18 +73,11 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({ toolbarPluginInstance, fu
                                 <GoToPreviousPage>
                                     {(props: RenderGoToPageProps) => (
                                         <button
-                                            style={{
-                                                backgroundColor: props.isDisabled ? '#96ccff' : '#357edd',
-                                                border: 'none',
-                                                borderRadius: '4px',
-                                                color: '#ffffff',
-                                                cursor: props.isDisabled ? 'not-allowed' : 'pointer',
-                                                padding: '8px',
-                                            }}
+                                            className=''
                                             disabled={props.isDisabled}
                                             onClick={props.onClick}
                                         >
-                                            Previous Page
+                                            <img src="/images/left-arrow.png" alt=""  className='w-4 h-4' />
                                         </button>
                                     )}
                                 </GoToPreviousPage>
@@ -108,22 +88,15 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({ toolbarPluginInstance, fu
                             <div style={{ padding: '0px 2px' }}>
                                 / <NumberOfPages />
                             </div>
-                            <div style={{ padding: '0px 2px' }}>
+                            <div style={{ padding: '0px 2px ' }}>
                                 <GoToNextPage>
                                     {(props: RenderGoToPageProps) => (
                                         <button
-                                            style={{
-                                                backgroundColor: props.isDisabled ? '#96ccff' : '#357edd',
-                                                border: 'none',
-                                                borderRadius: '4px',
-                                                color: '#ffffff',
-                                                cursor: props.isDisabled ? 'not-allowed' : 'pointer',
-                                                padding: '8px',
-                                            }}
+                                            className='pr-10'
                                             disabled={props.isDisabled}
                                             onClick={props.onClick}
                                         >
-                                            Next Page
+                                            <img src="/images/right.png" alt=""  className='w-7 h-7' />
                                         </button>
                                     )}
                                 </GoToNextPage>

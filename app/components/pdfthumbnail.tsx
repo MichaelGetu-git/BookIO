@@ -16,6 +16,14 @@ function PdfThumbnail({ pdfUrl }) {
             pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
             async function renderFirstPage() {
+
+                if (pdfUrl == "" || null) {
+                    return (
+                        <button >
+                            <img src={""} alt="pdf preview" className='w-[200px] h-[250px] border border-gray-200 rounded-md'/>
+                        </button>
+                    )
+                }
                 try {
                     setLoading(true);
                     const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
